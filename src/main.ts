@@ -1,6 +1,6 @@
 import { CacheModule } from '@nestjs/cache-manager';
 
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 
 import { NestFactory } from '@nestjs/core';
 
@@ -44,7 +44,9 @@ export class ApplicationModule {
         level: 'info'
       }
     })).then(server => {
-      server.listen(Environment.getInt('PORT'));
+      server.listen(Environment.getInt('PORT')).then(
+        () => Logger.log(`server is running on ${Environment.getString('APP_URL')}`)
+      );
     });
   }
 }
