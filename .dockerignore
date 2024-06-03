@@ -1,0 +1,15 @@
+dist/
+node_modules/
+
+.env
+.env.example
+.gitignore
+.editorconfig
+
+LICENSE
+
+README.md
+
+eslint.config.mjs
+jest.config.ts
+
