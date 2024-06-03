@@ -30,6 +30,9 @@ import { RedisClientOptions } from 'redis';
     CacheModule.register<RedisClientOptions>({
       store: CacheManagerRedisStore,
       isGlobal: true,
+      // @ts-ignore
+      host: Environment.getString('REDIS_HOST'),
+      port: Environment.getInt('REDIS_PORT'),
       username: Environment.getString('REDIS_USERNAME'),
       database: Environment.getInt('REDIS_DATABASE'),
       password: Environment.getString('REDIS_PASSWORD')

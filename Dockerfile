@@ -60,10 +60,6 @@ RUN rm -rf dist
 
 FROM copy-dist AS release
 
-## Expose port 3333
-
-EXPOSE 3333
-
 ## Run application
 
 CMD ["node", "main.js"]
