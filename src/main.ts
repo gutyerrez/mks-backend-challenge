@@ -42,13 +42,13 @@ import { RedisClientOptions } from 'redis';
 })
 export class ApplicationModule {
   public static async bootstrap() {
-    NestFactory.create(ApplicationModule, new FastifyAdapter({
-      logger: {
-        level: 'info'
-      }
-    })).then(server => {
+    Object.entries(process.env).forEach(env => {
+      Logger.debug(`[${env[0]}]: ${env[1]}`);
+    });
+
+    NestFactory.create(ApplicationModule, new FastifyAdapter()).then(server => {
       server.listen(Environment.getInt('PORT')).then(
-        () => Logger.log(`server is running on ${Environment.getString('APP_URL')}`)
+        () => Logger.log(`server is running on ${Environment.getString('APP_URL')} 🚀`)
       );
     });
   }
