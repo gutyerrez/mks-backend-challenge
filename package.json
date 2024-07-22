@@ -25,11 +25,13 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@fastify/static": "^7.0.4",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^10.3.8",
     "@nestjs/core": "^10.3.8",
     "@nestjs/platform-fastify": "^10.3.8",
+    "@nestjs/swagger": "^7.3.1",
     "@nestjs/typeorm": "^10.0.2",
     "@x-spacy/environment": "^1.0.2",
     "@x-spacy/exceptions": "^1.2.1",

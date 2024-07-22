@@ -6,9 +6,13 @@ import { NestFactory } from '@nestjs/core';
 
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { HealthzModule } from '@gutyerrez/mks-backend-challenge/healthz/HealthzModule';
+
+import { MovieModule } from '@gutyerrez/mks-backend-challenge/movie/MovieModule';
 
 import { Environment } from '@x-spacy/environment';
 
@@ -27,28 +31,38 @@ import { RedisClientOptions } from 'redis';
       database: Environment.getString('DATABASE_NAME'),
       entities: []
     }),
-    CacheModule.register<RedisClientOptions>({
+    CacheModule.register<RedisClientOptions & {
+      host: string,
+      port: number
+    }>({
       store: CacheManagerRedisStore,
       isGlobal: true,
-      // @ts-ignore
       host: Environment.getString('REDIS_HOST'),
       port: Environment.getInt('REDIS_PORT'),
       username: Environment.getString('REDIS_USERNAME'),
       database: Environment.getInt('REDIS_DATABASE'),
       password: Environment.getString('REDIS_PASSWORD')
     }),
-    HealthzModule
+    HealthzModule,
+    MovieModule
   ]
 })
 export class ApplicationModule {
   public static async bootstrap() {
-    Object.entries(process.env).forEach(env => {
-      Logger.debug(`[${env[0]}]: ${env[1]}`);
-    });
-
     NestFactory.create(ApplicationModule, new FastifyAdapter()).then(server => {
+      const documnet = new DocumentBuilder()
+        .setTitle('MKS Backend Challenge')
+        .setDescription('MKS Backend Challenge')
+        .setVersion('1.0')
+        .addBearerAuth()
+        .build();
+
+      const swagger = SwaggerModule.createDocument(server, documnet);
+
+      SwaggerModule.setup('api/docs', server, swagger);
+
       server.listen(Environment.getInt('PORT')).then(
-        () => Logger.log(`server is running on ${Environment.getString('APP_URL')} 🚀`)
+        () => Logger.log(`Server is running on ${Environment.getString('APP_URL')} 🚀`, 'NestApplication')
       );
     });
   }
